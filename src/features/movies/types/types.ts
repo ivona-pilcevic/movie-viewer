@@ -10,6 +10,7 @@ export interface IMovie {
 	title: string
 	video: boolean
 	ratings: IRating[]
+	releaseDate: string
 }
 
 interface IRating {

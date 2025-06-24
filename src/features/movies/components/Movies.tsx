@@ -7,6 +7,10 @@ import MovieCard from '../../../components/MovieCard'
 import GlobalLoader from '../../../components/common/GlobalLoader'
 import { COLORS } from '../../../styles/colors'
 import { SPACES } from '../../../styles/spaces'
+import { dateFormat } from '../../../utils/dateFormat'
+import { removeDuplicates } from '../utils/removeDuplicates'
+import { getPosterUrl } from '../utils/getPosterUrl'
+import { sortByRatingDesc } from '../utils/sortByRating'
 
 const Movies = () => {
 	const { movies, isFetchingMovies, isLoadingMovies } = useFetchMovies()
@@ -22,12 +26,22 @@ const Movies = () => {
 			/>
 		)
 
+	const deduplicatedMovies = removeDuplicates(movies)
+	const sortedMovies = sortByRatingDesc(deduplicatedMovies)
+
 	return (
 		<GridWrapper>
 			<Row gutter={[24, 24]} justify="center" align="middle">
-				{movies.map((movie) => (
-					<Col key={movie.id} xs={24} sm={12} md={8} lg={6} xl={4}>
-						<MovieCard />
+				{sortedMovies?.map((movie, i) => (
+					<Col key={`${movie.id}_${i}`} xs={24} sm={12} md={8} lg={6} xl={4}>
+						<MovieCard
+							title={movie?.title}
+							releaseDate={dateFormat(movie?.releaseDate)}
+							posterUrl={getPosterUrl(movie?.posterPath)}
+							rating={movie?.ratings[0]?.rating}
+							inFavorites={false}
+							selected={false}
+						/>
 					</Col>
 				))}
 			</Row>
