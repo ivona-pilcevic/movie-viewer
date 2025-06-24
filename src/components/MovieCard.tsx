@@ -1,4 +1,4 @@
-import { HeartFilled, HeartOutlined, StarFilled } from '@ant-design/icons'
+import { HeartFilled, HeartOutlined, StarFilled, UserOutlined } from '@ant-design/icons'
 import styled, { css } from 'styled-components'
 import { COLORS } from '../styles/colors'
 import { SPACES } from '../styles/spaces'
@@ -9,6 +9,7 @@ interface IProps {
 	releaseDate: string | null
 	posterUrl: string
 	rating: number
+	popularity: number
 	inFavorites: boolean
 	selected: boolean
 }
@@ -18,6 +19,7 @@ const MovieCard: React.FC<IProps> = ({
 	releaseDate,
 	posterUrl,
 	rating,
+	popularity,
 	inFavorites,
 	selected,
 }) => {
@@ -25,14 +27,20 @@ const MovieCard: React.FC<IProps> = ({
 		<Wrapper $selected={selected}>
 			<Poster src={posterUrl} alt={title} />
 			<Info>
-				<Tooltip title={title}>
+				<Tooltip title={title.length > 20 ? title : undefined}>
 					<Title>{title}</Title>
 				</Tooltip>
 				<Date>{releaseDate}</Date>
 				<Footer>
 					<Rating>
-						<StarFilled style={{ color: COLORS.YELLOW }} /> {rating}
+						<div>
+							<StarFilled style={{ color: COLORS.YELLOW }} /> {rating}
+						</div>
+						<div>
+							<UserOutlined /> {popularity}
+						</div>
 					</Rating>
+
 					<FavoriteIcon>
 						{inFavorites ? (
 							<HeartFilled style={{ color: COLORS.HIGHLIGHT }} />
@@ -113,7 +121,7 @@ export const Footer = styled.div`
 export const Rating = styled.div`
 	display: flex;
 	align-items: center;
-	gap: 4px;
+	gap: ${SPACES.SMALL};
 	font-size: 0.9rem;
 `
 

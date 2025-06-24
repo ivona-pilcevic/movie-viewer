@@ -13,7 +13,7 @@ export interface IMovie {
 	releaseDate: string
 }
 
-interface IRating {
+export interface IRating {
 	id: string
 	rating: number
 }
