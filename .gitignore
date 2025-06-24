@@ -1,0 +1,50 @@
+# dependencies
+/node_modules
+
+# production
+/dist
+/build
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# dotenv environment variables
+.env
+.env.*.local
+
+# Vite cache
+/.vite
+.vite-cache/
+
+# editor settings
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# MacOS
+.DS_Store
+
+# styled-components build artifacts (if any)
+.sc-*
+
+# typescript build cache
+*.tsbuildinfo
+
+# Optional: coverage reports (if you add testing later)
+coverage/
+
+# Optional: local storage/DB (just in case)
+/*.local
+*.sqlite
+
+# Optional: lint cache
+.eslintcache
+
+# Prettier
+.prettiercache
