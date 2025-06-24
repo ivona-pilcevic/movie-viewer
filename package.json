@@ -12,6 +12,8 @@
   "dependencies": {
     "@tanstack/react-query": "^5.81.2",
     "antd": "^5.26.2",
+    "axios": "^1.10.0",
+    "axios-case-converter": "^1.1.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "styled-components": "^6.1.19"
