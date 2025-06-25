@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import type { IMovie } from '../types/types'
-import { FETCH_MOVIES_KEY, fetchMovies } from '../utils/api'
+import type { IMovie } from '../../types/types'
+import { FETCH_MOVIES_KEY, fetchMovies } from '../../utils/api'
 
 const useFetchMovies = () => {
 	const {

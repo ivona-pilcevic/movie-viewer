@@ -1,20 +1,29 @@
 import { Col, Empty, Row, Typography } from 'antd'
 import styled from 'styled-components'
 
-import useFetchMovies from '../hooks/useFetchMovies'
+import useFetchMovies from '../hooks/api/useFetchMovies'
 
 import MovieCard from '../../../components/MovieCard'
 import GlobalLoader from '../../../components/common/GlobalLoader'
 import { COLORS } from '../../../styles/colors'
 import { SPACES } from '../../../styles/spaces'
+
 import { dateFormat } from '../../../utils/dateFormat'
 import { removeDuplicates } from '../utils/removeDuplicates'
 import { getPosterUrl } from '../utils/getPosterUrl'
 import { sortByRatingDesc } from '../utils/sortByRating'
 import { getRatingById } from '../utils/getRatingById'
+import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation'
 
 const Movies = () => {
 	const { movies, isFetchingMovies, isLoadingMovies } = useFetchMovies()
+
+	const deduplicatedMovies = removeDuplicates(movies || [])
+	const sortedMovies = sortByRatingDesc(deduplicatedMovies, 'imdb')
+
+	const { selectedIndex, setSelectedIndex, favorites, toggleFavorite } = useKeyboardNavigation(
+		sortedMovies?.length,
+	)
 
 	if (isLoadingMovies || isFetchingMovies) return <GlobalLoader />
 	if (!movies)
@@ -27,9 +36,6 @@ const Movies = () => {
 			/>
 		)
 
-	const deduplicatedMovies = removeDuplicates(movies)
-	const sortedMovies = sortByRatingDesc(deduplicatedMovies)
-
 	return (
 		<GridWrapper>
 			<Row gutter={[24, 24]} justify="center" align="middle">
@@ -41,8 +47,10 @@ const Movies = () => {
 							posterUrl={getPosterUrl(movie.posterPath)}
 							rating={getRatingById(movie.ratings, 'imdb')}
 							popularity={getRatingById(movie.ratings, 'popularity')}
-							inFavorites={false}
-							selected={false}
+							inFavorites={favorites.includes(i)}
+							selected={selectedIndex === i}
+							onClick={() => setSelectedIndex(i)}
+							onToggleFavorite={() => toggleFavorite(i)}
 						/>
 					</Col>
 				))}

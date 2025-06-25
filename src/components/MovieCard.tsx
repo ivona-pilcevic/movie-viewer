@@ -1,5 +1,5 @@
 import { HeartFilled, HeartOutlined, StarFilled, UserOutlined } from '@ant-design/icons'
-import styled, { css } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import { COLORS } from '../styles/colors'
 import { SPACES } from '../styles/spaces'
 import { Tooltip } from 'antd'
@@ -12,6 +12,8 @@ interface IProps {
 	popularity: number
 	inFavorites: boolean
 	selected: boolean
+	onToggleFavorite: () => void
+	onClick: () => void
 }
 
 const MovieCard: React.FC<IProps> = ({
@@ -22,9 +24,11 @@ const MovieCard: React.FC<IProps> = ({
 	popularity,
 	inFavorites,
 	selected,
+	onToggleFavorite,
+	onClick,
 }) => {
 	return (
-		<Wrapper $selected={selected}>
+		<Wrapper onClick={onClick} $selected={selected}>
 			<Poster src={posterUrl} alt={title} />
 			<Info>
 				<Tooltip title={title.length > 20 ? title : undefined}>
@@ -41,7 +45,13 @@ const MovieCard: React.FC<IProps> = ({
 						</div>
 					</Rating>
 
-					<FavoriteIcon>
+					<FavoriteIcon
+						animate={inFavorites}
+						onClick={(e) => {
+							e.stopPropagation()
+							onToggleFavorite?.()
+						}}
+					>
 						{inFavorites ? (
 							<HeartFilled style={{ color: COLORS.HIGHLIGHT }} />
 						) : (
@@ -70,7 +80,7 @@ export const Wrapper = styled.div<{ $selected: boolean }>`
 		$selected &&
 		css`
 			transform: scale(1.03);
-			box-shadow: 0px 0px 20px ${COLORS.HIGHLIGHT};
+			box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.5);
 		`}
 
 	&:hover {
@@ -125,8 +135,21 @@ export const Rating = styled.div`
 	font-size: 0.9rem;
 `
 
-export const FavoriteIcon = styled.div`
+export const FavoriteIcon = styled.div<{ animate?: boolean }>`
 	font-size: 1.2rem;
+	cursor: pointer;
+
+	${({ animate }) =>
+		animate &&
+		css`
+			animation: ${pop} 0.4s ease;
+		`}
+`
+
+const pop = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
 `
 
 export default MovieCard
