@@ -17,3 +17,13 @@ export interface IRating {
 	id: string
 	rating: number
 }
+
+export enum ERatingKey {
+	Imdb = 'imdb',
+	Popularity = 'popularity',
+}
+
+export enum ESortOrder {
+	Asc = 'asc',
+	Desc = 'desc',
+}
