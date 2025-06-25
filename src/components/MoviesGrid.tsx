@@ -25,7 +25,7 @@ const MoviesGrid: React.FC<IProps> = ({
 }) => {
 	return (
 		<GridWrapper>
-			<Row gutter={[24, 24]} justify="center" align="middle">
+			<Row gutter={[24, 24]} justify="start" align="middle">
 				{movies?.map((movie, i) => (
 					<Col key={`${movie.id}_${i}`} xs={24} sm={12} md={8} lg={6} xl={4}>
 						<div data-index={i}>
