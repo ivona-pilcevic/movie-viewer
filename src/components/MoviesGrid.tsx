@@ -28,17 +28,19 @@ const MoviesGrid: React.FC<IProps> = ({
 			<Row gutter={[24, 24]} justify="center" align="middle">
 				{movies?.map((movie, i) => (
 					<Col key={`${movie.id}_${i}`} xs={24} sm={12} md={8} lg={6} xl={4}>
-						<MovieCard
-							title={movie.title}
-							releaseDate={dateFormat(movie.releaseDate)}
-							posterUrl={getPosterUrl(movie.posterPath)}
-							rating={getRatingById(movie.ratings, 'imdb')}
-							popularity={getRatingById(movie.ratings, 'popularity')}
-							inFavorites={favorites.includes(i)}
-							selected={selectedIndex === i}
-							onClick={() => setSelectedIndex(i)}
-							onToggleFavorite={() => toggleFavorite(i)}
-						/>
+						<div data-index={i}>
+							<MovieCard
+								title={movie.title}
+								releaseDate={dateFormat(movie.releaseDate)}
+								posterUrl={getPosterUrl(movie.posterPath)}
+								rating={getRatingById(movie.ratings, 'imdb')}
+								popularity={getRatingById(movie.ratings, 'popularity')}
+								inFavorites={favorites.includes(movie.id)}
+								selected={selectedIndex === i}
+								onClick={() => setSelectedIndex(i)}
+								onToggleFavorite={() => toggleFavorite(movie.id)}
+							/>
+						</div>
 					</Col>
 				))}
 			</Row>

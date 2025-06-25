@@ -46,7 +46,7 @@ const MovieCard: React.FC<IProps> = ({
 					</Rating>
 
 					<FavoriteIcon
-						animate={inFavorites}
+						$animate={inFavorites}
 						onClick={(e) => {
 							e.stopPropagation()
 							onToggleFavorite?.()
@@ -135,12 +135,12 @@ export const Rating = styled.div`
 	font-size: 0.9rem;
 `
 
-export const FavoriteIcon = styled.div<{ animate?: boolean }>`
+export const FavoriteIcon = styled.div<{ $animate?: boolean }>`
 	font-size: 1.2rem;
 	cursor: pointer;
 
-	${({ animate }) =>
-		animate &&
+	${({ $animate }) =>
+		$animate &&
 		css`
 			animation: ${pop} 0.4s ease;
 		`}

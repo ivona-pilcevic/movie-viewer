@@ -1,13 +1,22 @@
 import { useEffect, useState } from 'react'
+import type { IMovie } from '../types/types'
+import LocalStorage from '../../../utils/LocalStorage'
 
-export const useKeyboardNavigation = (length: number) => {
-	const [selectedIndex, setSelectedIndex] = useState(-1)
-	const [favorites, setFavorites] = useState<number[]>([])
+export const useKeyboardNavigation = (movies: IMovie[]) => {
+	const length = movies.length
+	const [selectedIndex, setSelectedIndex] = useState<number>(-1)
 
-	const toggleFavorite = (index: number) => {
-		setFavorites((prev) =>
-			prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
-		)
+	const [favorites, setFavorites] = useState<number[]>(() => {
+		const saved = LocalStorage.get('favorites')
+		return Array.isArray(saved) ? saved : []
+	})
+
+	const toggleFavorite = (id: number) => {
+		setFavorites((prev) => {
+			const next = prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+			LocalStorage.set('favorites', next)
+			return next
+		})
 	}
 
 	useEffect(() => {
@@ -33,13 +42,14 @@ export const useKeyboardNavigation = (length: number) => {
 					break
 				case 'Enter':
 					event.preventDefault()
-					toggleFavorite(selectedIndex)
+					const movie = movies[selectedIndex]
+					if (movie) toggleFavorite(movie.id)
 					break
 			}
 		}
 		window.addEventListener('keydown', handleKeyDown)
 		return () => window.removeEventListener('keydown', handleKeyDown)
-	}, [length, selectedIndex])
+	}, [length, selectedIndex, movies])
 
 	return {
 		selectedIndex,

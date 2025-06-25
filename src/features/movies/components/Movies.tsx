@@ -1,20 +1,28 @@
+import { useMemo, useState } from 'react'
 import { Empty, Typography } from 'antd'
 
 import useFetchMovies from '../hooks/api/useFetchMovies'
-
-import GlobalLoader from '../../../components/common/GlobalLoader'
-import { COLORS } from '../../../styles/colors'
+import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation'
+import { useInfiniteScroll } from '../hooks/useINfiniteScroll'
+import { useScrollIntoView } from '../hooks/useScrollIntoView'
 
 import { removeDuplicates } from '../utils/removeDuplicates'
-import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation'
-import MoviesGrid from '../../../components/MoviesGrid'
 import { sortByRating } from '../utils/sortByRating'
-import { useMemo, useState } from 'react'
+
 import { ERatingKey, ESortOrder } from '../types/types'
+
+import GlobalLoader from '../../../components/common/GlobalLoader'
+import MoviesGrid from '../../../components/MoviesGrid'
 import SortControls from '../../../components/SortControls'
+
+import { COLORS } from '../../../styles/colors'
+
+const BATCH = 50
 
 const Movies = () => {
 	const { movies, isFetchingMovies, isLoadingMovies } = useFetchMovies()
+
+	const [displayCount, setDisplayCount] = useState(BATCH)
 
 	const [ratingKey, setRatingKey] = useState<ERatingKey>(ERatingKey.Imdb)
 	const [order, setOrder] = useState<ESortOrder>(ESortOrder.Desc)
@@ -25,8 +33,14 @@ const Movies = () => {
 		[deduplicatedMovies, ratingKey, order],
 	)
 
-	const { selectedIndex, setSelectedIndex, favorites, toggleFavorite } = useKeyboardNavigation(
-		sortedMovies?.length,
+	const { selectedIndex, setSelectedIndex, favorites, toggleFavorite } =
+		useKeyboardNavigation(sortedMovies)
+
+	useScrollIntoView(selectedIndex)
+
+	const loaderRef = useInfiniteScroll(
+		() => setDisplayCount((c) => Math.min(c + BATCH, sortedMovies.length)),
+		displayCount < sortedMovies.length,
 	)
 
 	if (isLoadingMovies || isFetchingMovies) return <GlobalLoader />
@@ -40,6 +54,8 @@ const Movies = () => {
 			/>
 		)
 
+	const visibleMovies = sortedMovies.slice(0, displayCount)
+
 	return (
 		<div>
 			<SortControls
@@ -49,12 +65,13 @@ const Movies = () => {
 				setOrder={setOrder}
 			/>
 			<MoviesGrid
-				movies={sortedMovies}
+				movies={visibleMovies}
 				favorites={favorites}
 				selectedIndex={selectedIndex}
 				setSelectedIndex={setSelectedIndex}
 				toggleFavorite={toggleFavorite}
 			/>
+			<div ref={loaderRef} style={{ height: 1 }} />
 		</div>
 	)
 }
