@@ -3,7 +3,7 @@ import { Empty, Typography } from 'antd'
 
 import useFetchMovies from '../hooks/api/useFetchMovies'
 import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation'
-import { useInfiniteScroll } from '../hooks/useINfiniteScroll'
+import { useInfiniteScroll } from '../hooks/useInfiniteScroll'
 import { useScrollIntoView } from '../hooks/useScrollIntoView'
 
 import { removeDuplicates } from '../utils/removeDuplicates'
